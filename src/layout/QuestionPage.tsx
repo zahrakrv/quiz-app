@@ -2,8 +2,15 @@ import { Button, Container, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import ListButton from '../components/ListButton';
 import ButtonCustom from '../components/Button';
+import { useSelector, useDispatch } from 'react-redux';
 
 const QuestionPage = () => {
+  const QuestionPage = () => {
+    const Data = useSelector(Data);
+    useEnhancedEffect(() => {
+      console.log(data);
+    }, []);
+  };
   return (
     <Container
       maxWidth="lg"

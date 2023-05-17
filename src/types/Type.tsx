@@ -15,6 +15,7 @@ export type Inputs = {
   number: number;
   difficulty: string;
   category: string;
+  yupResolver: any;
 
   //   movieName: string;
   //   directorName: string;

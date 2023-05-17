@@ -2,6 +2,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { Typography } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
+import { Controller } from 'react-hook-form';
 
 interface Props {
   label: string;
@@ -11,6 +12,7 @@ interface Props {
   name: string;
   errors: any;
   labelText: string;
+  control: any;
 }
 function Select({
   label,
@@ -19,6 +21,7 @@ function Select({
   showError,
   name,
   errors,
+  control,
   labelText,
 }: Props) {
   // console.log(errors);
@@ -29,30 +32,35 @@ function Select({
         {' '}
         {label}
       </Typography>
-
-      <TextField
-        id="outlined-select-currency"
-        select
-        // defaultValue=""
-        sx={{ width: 1, padding: '0px' }}
-        {...register(name, {
-          required: {
-            value: true,
-          },
-        })}
-        error={errors[name] ? true : false}
-        helperText={errors[name] && showError}
-      >
-        {options.map((option: any) => (
-          <MenuItem
-            sx={{ paddingY: '2px' }}
-            key={option.value}
-            value={option.value}
+      <Controller
+        name={name}
+        control={control}
+        rules={{
+          required: 'Please enter something',
+        }}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            id="outlined-select-currency"
+            select
+            // defaultValue=""
+            sx={{ width: 1, padding: '0px' }}
+            {...register(name)}
+            error={errors[name] ? true : false}
+            helperText={errors[name]?.message}
           >
-            {option.label}
-          </MenuItem>
-        ))}
-      </TextField>
+            {options.map((option: any) => (
+              <MenuItem
+                sx={{ paddingY: '2px' }}
+                key={option.value}
+                value={option.value}
+              >
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
+        )}
+      />
     </Box>
   );
 }

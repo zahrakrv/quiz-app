@@ -15,7 +15,7 @@ const FormSlice = createSlice({
       state.number = action.payload.number;
       state.category = action.payload.category;
       state.difficulty = action.payload.difficulty;
-      state.url = `https://opentdb.com/api.php?amount=${action.payload.number}&category=${action.payload.category}&difficulty=${action.payload.difficulty}`;
+      state.url = `amount=${action.payload.number}&category=${action.payload.category}&difficulty=${action.payload.difficulty}`;
     },
   },
 });

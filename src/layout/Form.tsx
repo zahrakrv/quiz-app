@@ -3,13 +3,29 @@ import ButtonCustom from '../components/Button';
 import Select from '../components/Select';
 import { TextField } from '@mui/material';
 import Box from '@mui/material/Box';
-import { useForm } from 'react-hook-form';
+// import { useForm } from 'react-hook-form';
 import { Inputs } from '../types/Type';
-import { useSelector, useDispatch } from 'react-redux';
 import { submit, FormSubmit } from '../redux/slices/form.slice';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useForm, Controller } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { INIT } from '../redux/slices/DataSlice';
+import { useSelector, useDispatch } from 'react-redux';
+
+//yup
+const registerSchema = yup.object().shape({
+  number: yup
+    .number()
+    .typeError('please write number')
+    .min(1, 'the minimum number is 1 question')
+    .max(11, 'the maximum number is 10 questions')
+    .required('number of questions is required'),
+  category: yup.string().required('please select one of categories'),
+  difficulty: yup.string().required('please select one of difficulties'),
+});
 
 const Form = () => {
   const formValue = useSelector(FormSubmit);
@@ -17,27 +33,39 @@ const Form = () => {
   console.log(formValue);
   const dispatch = useDispatch();
   const {
+    // for error
     register,
+    // submit
     handleSubmit,
+    // empty form
     reset,
+    control,
+    // error
     formState: { errors },
   } = useForm<Inputs>({
+    resolver: yupResolver(registerSchema),
+    // defaultValues: {
+    //   number: 0,
+    //   category: '',
+    //   difficulty: '',
+    // },
     mode: 'onChange',
-    // delayError: 1000,
+    delayError: 1000,
   });
   const navigate = useNavigate();
   const onSubmit = (data: Inputs) => {
+    console.log(data);
+    axios(
+      `https://opentdb.com/api.php?amount=${data.number}&category=${data.category}&difficulty=${data.difficulty}&token=cce360c9eae295bd30812d851cd94e79d939df0570a89ba8858852df25ebcd6f`
+    ).then((res) => dispatch(INIT(res.data.results)));
     navigate('/questions');
-    axios.get(`${formValue.url}`).then((res) => {
-      console.log(res);
-    });
-    dispatch(
-      submit({
-        number: data.number,
-        category: data.category,
-        difficulty: data.difficulty,
-      })
-    );
+    // dispatch(
+    //   submit({
+    //     number: data.number,
+    //     category: data.category,
+    //     difficulty: data.difficulty,
+    //   })
+    // );
     console.log(JSON.stringify(data, null, 2));
     reset();
   };
@@ -52,15 +80,22 @@ const Form = () => {
         <Typography variant="h2" gutterBottom>
           Setup Quiz
         </Typography>
-        <TextField
-          id="outlined-basic"
-          error={errors.number ? true : false}
-          label="Outlined"
-          variant="outlined"
-          sx={{ width: 1 }}
-          type="number"
-          {...register('number', { required: true })}
-          helperText={errors.number && 'number is required'}
+        <Controller
+          name="number"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              id="outlined-basic"
+              error={errors.number ? true : false}
+              label="Outlined"
+              variant="outlined"
+              sx={{ width: 1 }}
+              type="number"
+              {...register('number')}
+              helperText={errors.number?.message}
+            />
+          )}
         />
         <Select
           labelText={'select Difficulty'}
@@ -74,6 +109,7 @@ const Form = () => {
           errors={errors}
           name={'difficulty'}
           register={register}
+          control={control}
           showError="difficulty is required"
         />
         <Select
@@ -88,6 +124,7 @@ const Form = () => {
           errors={errors}
           name={'category'}
           register={register}
+          control={control}
           showError="category is required"
         />
         <ButtonCustom
