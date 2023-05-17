@@ -3,14 +3,22 @@ import Box from '@mui/material/Box';
 import ListButton from '../components/ListButton';
 import ButtonCustom from '../components/Button';
 import { useSelector, useDispatch } from 'react-redux';
+import { Data } from '../redux/slices/DataSlice';
+import { CircularProgress } from '@mui/material';
+import { NEXT, ChangeNumberOfCorrect } from '../redux/slices/DataSlice';
+import ModalFinish from '../components/Modal';
+
+import { useState } from 'react';
 
 const QuestionPage = () => {
-  const QuestionPage = () => {
-    const Data = useSelector(Data);
-    useEnhancedEffect(() => {
-      console.log(data);
-    }, []);
-  };
+  // const [AllData, setAlldata] = useState();
+  const data = useSelector(Data);
+  const dispatch = useDispatch();
+  console.log(data);
+  const [finished, setFinished] = useState(false);
+  const [chooseVal, setChooseVal] = useState(-1);
+  const [CurrentAnswer, setCurrentAnswer] = useState('');
+
   return (
     <Container
       maxWidth="lg"
@@ -31,6 +39,9 @@ const QuestionPage = () => {
         },
       }}
     >
+      {finished && (
+        <ModalFinish finished={finished} setFinished={setFinished} />
+      )}
       <Box
         component="form"
         // onSubmit={handleSubmit(onSubmit)}
@@ -53,28 +64,64 @@ const QuestionPage = () => {
           gap: '1.8rem',
         }}
       >
-        <Typography
-          variant="h6"
-          sx={{ width: 1, textAlign: 'center', fontWeight: 'bold' }}
-        >
-          Correct Answers is 0/4
-        </Typography>
-        <Typography
-          variant="h6"
-          sx={{ width: 1, textAlign: 'center', fontWeight: 'bold' }}
-        >
-          Why this is happend in japan ? which one in correct
-          aswer?????????????/
-        </Typography>
-        <ListButton />
-        <ButtonCustom
-          bg={'#da9301'}
-          onClick={() => {
-            ('');
-          }}
-          type="submit"
-          children={'Next Question'}
-        />
+        {data.Alldata?.length > 0 ? (
+          <>
+            <Typography
+              variant="h6"
+              sx={{ width: 1, textAlign: 'center', fontWeight: 'bold' }}
+            >
+              {`Correct Answers is ${data.numberOfQuestions.NumberOfCorrect}/${data.numberOfQuestions.AllQuestion}`}
+            </Typography>
+            <Typography
+              variant="h6"
+              sx={{ width: 1, textAlign: 'center', fontWeight: 'bold' }}
+            ></Typography>
+            <ListButton
+              setChooseVal={setChooseVal}
+              chooseVal={chooseVal}
+              question={data.currentData.question}
+              item={data.currentData.items}
+              setCurrentAnswer={setCurrentAnswer}
+
+              // ...data.currentData.incorrect_answers,
+            />
+            <ButtonCustom
+              bg={'#da9301'}
+              onClick={() => {
+                if (data.numberOfQuestions.AllQuestion - 1 === data.question) {
+                  setFinished(true);
+                } else if (chooseVal === -1) {
+                  if (CurrentAnswer === data.currentData.correctItem) {
+                    dispatch(ChangeNumberOfCorrect());
+                  }
+                } else {
+                  dispatch(NEXT());
+                  if (CurrentAnswer === data.currentData.correctItem) {
+                    dispatch(ChangeNumberOfCorrect());
+                  }
+                }
+
+                setChooseVal(-1);
+              }}
+              type="button"
+              children={'Next Question'}
+            />
+          </>
+        ) : (
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <CircularProgress />
+            <Typography>Please wait!</Typography>
+          </Box>
+        )}
       </Box>
     </Container>
   );

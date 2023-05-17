@@ -18,10 +18,17 @@ export default function ButtonCustom({
   onClick,
   children,
   type,
+  className,
 }: Buttontype) {
   return (
     <Stack spacing={2} direction="row">
-      <ColorButton bg={bg} variant="contained" onClick={onClick} type={type}>
+      <ColorButton
+        bg={bg}
+        variant="contained"
+        onClick={onClick}
+        className={className}
+        type={type}
+      >
         {children}
       </ColorButton>
     </Stack>

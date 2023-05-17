@@ -56,16 +56,60 @@ const Form = () => {
   const onSubmit = (data: Inputs) => {
     console.log(data);
     axios(
-      `https://opentdb.com/api.php?amount=${data.number}&category=${data.category}&difficulty=${data.difficulty}&token=cce360c9eae295bd30812d851cd94e79d939df0570a89ba8858852df25ebcd6f`
+      `https://opentdb.com/api.php?amount=${data.number}&category=${data.category}&difficulty=${data.difficulty}&type=multiple&token=0d91ae87b4618b744ea4bb75c88ecb1316297e41ee9029516ea93423dd44eb3f`
     ).then((res) => dispatch(INIT(res.data.results)));
+    // const q = [
+    //   {
+    //     category: 'Sports',
+    //     type: 'multiple',
+    //     difficulty: 'easy',
+    //     question:
+    //       'In golf, what name is given to a hole score of two under par?',
+    //     correct_answer: 'Eagle',
+    //     incorrect_answers: ['Birdie', 'Bogey', 'Albatross'],
+    //   },
+    //   {
+    //     category: 'Sports',
+    //     type: 'multiple',
+    //     difficulty: 'easy',
+    //     question: 'Which country will host the 2020 Summer Olympics?',
+    //     correct_answer: 'Japan',
+    //     incorrect_answers: ['China', 'Australia', 'Germany'],
+    //   },
+    //   {
+    //     category: 'Sports',
+    //     type: 'multiple',
+    //     difficulty: 'easy',
+    //     question: 'Which team won 2014 FIFA World Cup in Brazil?',
+    //     correct_answer: 'Germany',
+    //     incorrect_answers: ['Argentina', 'Brazil', 'Netherlands'],
+    //   },
+    //   {
+    //     category: 'Sports',
+    //     type: 'multiple',
+    //     difficulty: 'easy',
+    //     question: 'Which player holds the NHL record of 2,857 points?',
+    //     correct_answer: 'Wayne Gretzky',
+    //     incorrect_answers: ['Mario Lemieux ', 'Sidney Crosby', 'Gordie Howe'],
+    //   },
+    //   {
+    //     category: 'Sports',
+    //     type: 'multiple',
+    //     difficulty: 'easy',
+    //     question: 'When was the FC Schalke 04 founded?',
+    //     correct_answer: '1904',
+    //     incorrect_answers: ['1909', '2008', '1999'],
+    //   },
+    // ];
+    // dispatch(INIT(q));
     navigate('/questions');
-    // dispatch(
-    //   submit({
-    //     number: data.number,
-    //     category: data.category,
-    //     difficulty: data.difficulty,
-    //   })
-    // );
+    dispatch(
+      submit({
+        number: data.number,
+        category: data.category,
+        difficulty: data.difficulty,
+      })
+    );
     console.log(JSON.stringify(data, null, 2));
     reset();
   };
@@ -73,6 +117,14 @@ const Form = () => {
   return (
     <>
       <Box
+        sx={{
+          borderRadius: '10px',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '1.8rem',
+        }}
         component="form"
         onSubmit={handleSubmit(onSubmit)}
         className="p-4 absolute top-24 left-1/2 -translate-x-1/2"
@@ -128,6 +180,7 @@ const Form = () => {
           showError="category is required"
         />
         <ButtonCustom
+          sx={{}}
           bg={'#da9301'}
           onClick={() => {
             ('');
