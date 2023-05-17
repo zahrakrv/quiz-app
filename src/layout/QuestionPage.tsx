@@ -88,19 +88,22 @@ const QuestionPage = () => {
             <ButtonCustom
               bg={'#da9301'}
               onClick={() => {
-                if (data.numberOfQuestions.AllQuestion - 1 === data.question) {
+                if (data.numberOfQuestions.AllQuestion === data.Eachquestion) {
                   setFinished(true);
-                } else if (chooseVal === -1) {
+
                   if (CurrentAnswer === data.currentData.correctItem) {
                     dispatch(ChangeNumberOfCorrect());
                   }
                 } else {
-                  dispatch(NEXT());
-                  if (CurrentAnswer === data.currentData.correctItem) {
-                    dispatch(ChangeNumberOfCorrect());
+                  if (chooseVal === -1) {
+                    ('');
+                  } else {
+                    dispatch(NEXT());
+                    if (CurrentAnswer === data.currentData.correctItem) {
+                      dispatch(ChangeNumberOfCorrect());
+                    }
                   }
                 }
-
                 setChooseVal(-1);
               }}
               type="button"

@@ -9,6 +9,7 @@ import { Link, Navigate } from 'react-router-dom';
 import { RESET } from '../redux/slices/DataSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { Data } from '../redux/slices/DataSlice';
 
 const style = {
   position: 'absolute' as const,
@@ -23,13 +24,18 @@ const style = {
 };
 
 export default function ModalFinish({ finished, setFinished }: any) {
+  const data = useSelector(Data);
   //   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setFinished(true);
   const handleClose = () => {
     setFinished(false);
-    const navigate = useNavigate();
-    navigate('/');
+    // const navigate = useNavigate();
+    // navigate('/');
   };
+  const totalPercent =
+    (data.numberOfQuestions.NumberOfCorrect /
+      data.numberOfQuestions.AllQuestion) *
+    100;
   const dispatch = useDispatch();
   return (
     <div>
@@ -38,7 +44,7 @@ export default function ModalFinish({ finished, setFinished }: any) {
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         open={finished}
-        onClose={handleClose}
+        // onClose={handleClose}
         closeAfterTransition
         slots={{ backdrop: Backdrop }}
         slotProps={{
@@ -63,14 +69,18 @@ export default function ModalFinish({ finished, setFinished }: any) {
               variant="h6"
               component="h2"
             >
-              You answered 13%!
+              {`You answered ${totalPercent}% ${
+                totalPercent < 50 ? 'You need more practice' : 'exelent!'
+              }`}
             </Typography>
             <Typography id="transition-modal-description" sx={{ mt: 2 }}>
               <Link to="/">
+                {' '}
                 <span
                   className="flex bg-[#da9301] w-max rounded p-2 mx-auto items-center justify-center"
                   onClick={() => {
                     dispatch(RESET());
+                    handleClose();
                   }}
                 >
                   Do you want to play Again??

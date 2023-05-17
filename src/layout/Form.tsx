@@ -56,7 +56,7 @@ const Form = () => {
   const onSubmit = (data: Inputs) => {
     console.log(data);
     axios(
-      `https://opentdb.com/api.php?amount=${data.number}&category=${data.category}&difficulty=${data.difficulty}&type=multiple&token=0d91ae87b4618b744ea4bb75c88ecb1316297e41ee9029516ea93423dd44eb3f`
+      `https://opentdb.com/api.php?amount=${data.number}&category=${data.category}&difficulty=${data.difficulty}&type=multiple&token=d662eb7eb77eefd856eac697ff539d34fb19c5081a6b8416d81612bc49c3da36`
     ).then((res) => dispatch(INIT(res.data.results)));
     // const q = [
     //   {
