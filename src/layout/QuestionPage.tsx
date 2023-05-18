@@ -15,6 +15,7 @@ const QuestionPage = () => {
   const data = useSelector(Data);
   const dispatch = useDispatch();
   console.log(data);
+  //state mmodal
   const [finished, setFinished] = useState(false);
   const [chooseVal, setChooseVal] = useState(-1);
   const [CurrentAnswer, setCurrentAnswer] = useState('');
@@ -88,7 +89,7 @@ const QuestionPage = () => {
             <ButtonCustom
               bg={'#da9301'}
               onClick={() => {
-                if (data.numberOfQuestions.AllQuestion === data.Eachquestion) {
+                if (data.question + 1 === data.numberOfQuestions.AllQuestion) {
                   setFinished(true);
 
                   if (CurrentAnswer === data.currentData.correctItem) {

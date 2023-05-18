@@ -56,8 +56,11 @@ const Form = () => {
   const onSubmit = (data: Inputs) => {
     console.log(data);
     axios(
-      `https://opentdb.com/api.php?amount=${data.number}&category=${data.category}&difficulty=${data.difficulty}&type=multiple&token=d662eb7eb77eefd856eac697ff539d34fb19c5081a6b8416d81612bc49c3da36`
-    ).then((res) => dispatch(INIT(res.data.results)));
+      `https://opentdb.com/api.php?amount=${data.number}&category=${data.category}&difficulty=${data.difficulty}&type=multiple&token=8919fb7a439a639e0f39d4359fdadcc108a15ecf5d736c956118f01dedcf98b7`
+    ).then((res) => {
+      dispatch(INIT(res.data.results));
+      navigate('/questions');
+    });
     // const q = [
     //   {
     //     category: 'Sports',
@@ -102,7 +105,7 @@ const Form = () => {
     //   },
     // ];
     // dispatch(INIT(q));
-    navigate('/questions');
+
     dispatch(
       submit({
         number: data.number,
@@ -180,7 +183,7 @@ const Form = () => {
           showError="category is required"
         />
         <ButtonCustom
-          sx={{}}
+          // sx={{}}
           bg={'#da9301'}
           onClick={() => {
             ('');

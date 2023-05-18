@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import shuffleArrayFunc from '../../lib/Shuffle';
 const initialState: any = {
-  Eachquestion: 0,
+  question: 0,
   Alldata: [],
   currentData: { question: '', items: [], correctItem: '' },
   numberOfQuestions: { AllQuestion: 0, NumberOfCorrect: 0 },
@@ -13,7 +13,7 @@ const dataSlice = createSlice({
   reducers: {
     INIT: (state, action) => {
       const { question, correct_answer, incorrect_answers } =
-        action.payload[state.Eachquestion];
+        action.payload[state.question];
 
       state.Alldata = action.payload;
       state.currentData = {
@@ -27,9 +27,9 @@ const dataSlice = createSlice({
       };
     },
     NEXT: (state) => {
+      state.question = state.question + 1;
       const { question, correct_answer, incorrect_answers } =
-        state.Alldata[state.Eachquestion];
-      state.Eachquestion = state.Eachquestion + 1;
+        state.Alldata[state.question];
       state.currentData = {
         question: question,
         items: [...shuffleArrayFunc([correct_answer, ...incorrect_answers])],
@@ -37,7 +37,7 @@ const dataSlice = createSlice({
       };
     },
     RESET: (state) => {
-      state.Eachquestion = 0;
+      state.question = 0;
       state.Alldata = [];
       state.currentData = {};
       state.numberOfQuestions = { AllQuestion: 0, NumberOfCorrect: 0 };
